@@ -36,6 +36,7 @@ def parse_json(request) -> str:
         message = '*' + json['type'] + '*\n'
         if json['type'] == 'SMS':
             message += '_From: ' + json['data']['from'] + '_\n\n'
+            message += '_At: ' + json['data']['datetime'] + '_\n\n'
 
         message += json['data']['text']
     else:
