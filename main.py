@@ -2,7 +2,7 @@ from base64 import b64decode
 from os import environ
 from time import time
 import ipinfo
-import telegram
+from telegram import Bot as telegram_bot, ParseMode
 from google.cloud import firestore
 
 BOT_TOKEN: str = environ['BOT_TOKEN']
@@ -11,11 +11,11 @@ IPINFO_TOKEN: str = environ['IPINFO_TOKEN']
 DB: firestore.Client
 
 
-def log(type: str, data: dict, error_type: str = '') -> None:
+def log(log_type: str, data: dict, error_type: str = '') -> None:
     """Write log to the Firestore DB.
 
     Args:
-        type (str): Log type.
+        log_type (str): Type of log.
         data (dict): Data to write.
         error_type (str): Type of error if it's a error log.
 
@@ -23,10 +23,10 @@ def log(type: str, data: dict, error_type: str = '') -> None:
         None
 
     """
-    if type == 'error':
+    if log_type == 'error':
         doc_ref = DB.collection('notify-bot').document('error').collection(error_type).document(str(time()))
     else:
-        doc_ref = DB.collection('notify-bot').document('archive').collection(type).document(str(time()))
+        doc_ref = DB.collection('notify-bot').document('archive').collection(log_type).document(str(time()))
 
     doc_ref.set(data)
 
@@ -37,7 +37,7 @@ def main(request) -> str:
     global DB
     try:
         DB = firestore.Client()
-        bot = telegram.Bot(token=BOT_TOKEN)
+        bot = telegram_bot(token=BOT_TOKEN)
     except:
         return 'ERROR'
 
@@ -57,7 +57,7 @@ def main(request) -> str:
     if not message:
         return 'ERROR'
 
-    bot.send_message(chat_id=USER_ID, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
+    bot.send_message(chat_id=USER_ID, text=message, parse_mode=ParseMode.MARKDOWN)
 
     return 'OK'
 

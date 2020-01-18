@@ -1,2 +1,3 @@
-python-telegram-bot
+google-cloud-firestore
 ipinfo
+python-telegram-bot
