@@ -1,3 +1,3 @@
-google-cloud-firestore
-ipinfo
-python-telegram-bot
+google-cloud-firestore==1.7.0
+ipinfo==3.0.0
+python-telegram-bot==12.7

@@ -16,7 +16,6 @@ def log(log_type: str, data: dict, error_type: str = '') -> None:
         None
 
     """
-    global DB
     if log_type == 'error':
         doc_ref = DB.collection('notify-bot').document('error').collection(error_type).document(str(time()))
     else:
